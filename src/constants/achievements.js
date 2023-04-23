@@ -21,6 +21,7 @@ const achievements = [
       coins: 50,
       hints: 3,
       xp: 20,
+      collectible: true,
     },
     type: "games-played",
     condition: 10,
