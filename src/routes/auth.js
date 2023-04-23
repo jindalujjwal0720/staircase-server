@@ -45,6 +45,8 @@ router.post("/register", async (req, res) => {
       .cookie("access_token", token, {
         httpOnly: true,
         sameSite: "none",
+        secure: true,
+        expires: new Date(Date.now() + 604800000),
       })
       .json({
         message: "User registered successfully",
@@ -80,6 +82,8 @@ router.post("/login", async (req, res) => {
         .cookie("access_token", token, {
           httpOnly: true,
           sameSite: "none",
+          secure: true,
+          expires: new Date(Date.now() + 604800000),
         })
         .json({
           message: "User logged in successfully",
@@ -110,6 +114,7 @@ router.get("/user", authenticateToken, async (req, res) => {
     .cookie("access_token", token, {
       httpOnly: true,
       sameSite: "none",
+      secure: true,
     })
     .json({
       message: "User logged in successfully",
