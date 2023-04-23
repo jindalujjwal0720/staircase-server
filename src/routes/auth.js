@@ -115,6 +115,7 @@ router.get("/user", authenticateToken, async (req, res) => {
       httpOnly: true,
       sameSite: "none",
       secure: true,
+      expires: new Date(Date.now() + 604800000),
     })
     .json({
       message: "User logged in successfully",
