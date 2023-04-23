@@ -86,8 +86,10 @@ router.get("/hint", async (req, res) => {
       message: "Cannot reach target from here.",
     });
   }
+  console.log("path", path);
   const user = await User.findById(id);
   if (!user) return res.status(400).json({ message: "User not found." });
+  user.hints -= 1;
   user.totalHintsUsed += 1;
   // check for new achievements
   // only responsible for hints used achievement
@@ -96,6 +98,8 @@ router.get("/hint", async (req, res) => {
   });
   for (let i = 0; i < newAchievements.length; i++) {
     user.rewards.push(makeReward(newAchievements[i].rewards));
+    if (newAchievements[i].rewards.collectible)
+      user.collectibles.push(newAchievements[i].rewards.collectible);
   }
   await user.save();
   res.status(200).json({ path, next, hint: nextMeaning });
@@ -143,19 +147,19 @@ router.patch("/update", async (req, res) => {
     let difficulty = start.length;
     if (difficulty === 3) {
       const path = bfs(graph3, start, end);
-      xpInc = 10 - penalties - hintsUsed - (moves - path.length);
+      xpInc = Math.max(0, 10 - penalties - hintsUsed - (moves - path.length));
       coinsInc = Math.max(0, Math.floor(xpInc * Math.PI));
     } else if (difficulty === 4) {
       const path = bfs(graph4, start, end);
-      xpInc = 20 - penalties - hintsUsed - (moves - path.length);
+      xpInc = Math.max(0, 20 - penalties - hintsUsed - (moves - path.length));
       coinsInc = Math.max(0, Math.floor(xpInc * Math.PI));
     } else if (difficulty === 5) {
       const path = bfs(graph5, start, end);
-      xpInc = 40 - penalties - hintsUsed - (moves - path.length);
+      xpInc = Math.max(0, 40 - penalties - hintsUsed - (moves - path.length));
       coinsInc = Math.max(0, Math.floor(xpInc * Math.PI));
     } else if (difficulty === 6) {
       const path = bfs(graph6, start, end);
-      xpInc = 50 - penalties - hintsUsed - (moves - path.length);
+      xpInc = Math.max(0, 50 - penalties - hintsUsed - (moves - path.length));
       coinsInc = Math.max(0, Math.floor(xpInc * Math.PI));
     }
     user.xp = user.xp + Math.max(xpInc, 0);
@@ -172,7 +176,7 @@ router.patch("/update", async (req, res) => {
       bonusHints = Math.floor(user.level * Math.PI);
     }
     user.coins = user.coins + coinsInc + bonusCoins;
-    user.hints = Math.max(0, user.hints - hintsUsed + bonusHints);
+    user.hints = user.hints + bonusHints;
     user.gamesPlayed = user.gamesPlayed + 1;
     // update achievements
     // only responsible for games played achievements
@@ -181,6 +185,8 @@ router.patch("/update", async (req, res) => {
     });
     for (let i = 0; i < newAchievements.length; i++) {
       user.rewards.push(makeReward(newAchievements[i].rewards));
+      if (newAchievements[i].rewards.collectible)
+        user.collectibles.push(newAchievements[i].rewards.collectible);
     }
     await user.save();
     res.status(200).json({

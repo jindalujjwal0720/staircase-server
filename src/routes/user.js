@@ -82,6 +82,8 @@ router.patch("/transaction", async (req, res) => {
     });
     for (let i = 0; i < newAchievements.length; i++) {
       user.rewards.push(makeReward(newAchievements[i].rewards));
+      if (newAchievements[i].rewards.collectible)
+        user.collectibles.push(newAchievements[i].rewards.collectible);
     }
     await user.save();
     res.status(200).json({
