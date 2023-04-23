@@ -44,7 +44,6 @@ router.post("/register", async (req, res) => {
       .status(201)
       .cookie("access_token", token, {
         httpOnly: true,
-        sameSite: true,
       })
       .json({
         message: "User registered successfully",
@@ -79,7 +78,6 @@ router.post("/login", async (req, res) => {
         .status(200)
         .cookie("access_token", token, {
           httpOnly: true,
-          sameSite: true,
         })
         .json({
           message: "User logged in successfully",
@@ -109,7 +107,6 @@ router.get("/user", authenticateToken, async (req, res) => {
     .status(200)
     .cookie("access_token", token, {
       httpOnly: true,
-      sameSite: true,
     })
     .json({
       message: "User logged in successfully",
