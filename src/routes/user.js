@@ -123,7 +123,8 @@ router.patch("/openreward", async (req, res) => {
     );
     user.coins = user.coins + reward.rewards.coins ?? 0;
     user.hints = user.hints + reward.rewards.hints ?? 0;
-    if(reward.rewards.collectible)
+    user.collectibles = user.collectibles.filter((collectible) => typeof collectible === 'object');
+    if(typeof reward.rewards.collectible === 'object')
     user.collectibles = [
       ...user.collectibles,
       reward.rewards.collectible,
