@@ -54,6 +54,11 @@ router.post("/register", async (req, res) => {
         });
         user.rewards.push(rewardToUser);
         referringUser.rewards.push(rewardToReferrer);
+        referringUser.referrals.push({
+          id: user._id,
+          name: user.name,
+          time: Date.now(),
+        });
         await referringUser.save();
       }
     }
