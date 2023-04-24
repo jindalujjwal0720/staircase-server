@@ -11,6 +11,7 @@ const makeReward = (rewards) => {
 
 const makeCollectible = () => {
   const uid = uuidv4();
+  const collectible = biasedRandomCollectible(collectibles);
   return {
     id: uid,
     ...collectible,
@@ -46,14 +47,14 @@ const collectibles = [
   { value: "y", frequency: 1, name: "Yummy" },
   { value: "z", frequency: 1, name: "Zesty" },
 ];
-function biasedRandomInt(biases) {
+function biasedRandomCollectible(biases) {
   const totalWeight = biases.reduce((acc, curr) => acc + curr.frequency, 0);
   const randomNum = Math.floor(Math.random() * totalWeight);
   let sum = 0;
   for (let i = 0; i < biases.length; i++) {
     sum += biases[i].frequency;
     if (randomNum < sum) {
-      return biases[i].value;
+      return biases[i];
     }
   }
 }
