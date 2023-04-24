@@ -34,6 +34,29 @@ router.post("/register", async (req, res) => {
       email,
       passwordHash,
     });
+    // adding referral reward to the user
+    if (req.body.referralCode) {
+      const referringUser = await User.findById(req.body.referralCode);
+      if (referringUser) {
+        const rewardToReferrer = makeReward({
+          coins: 100,
+          hints: 5,
+          xp: 0,
+          collectible: true,
+          description: `Referral reward from ${user.name}`,
+        });
+        const rewardToUser = makeReward({
+          coins: 100,
+          hints: 5,
+          xp: 0,
+          collectible: true,
+          description: `Referral reward for joining from ${referringUser.name}`,
+        });
+        user.rewards.push(rewardToUser);
+        referringUser.rewards.push(rewardToReferrer);
+        await referringUser.save();
+      }
+    }
     await user.save();
     // generating token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
