@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const authenticateToken = require("../middlewares/auth");
+const { makeReward } = require("../resolvers/rewards");
 dotenv.config();
 const router = express.Router();
 
@@ -12,7 +13,7 @@ router.get("/", (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
-  const { name, password, email } = req.body;
+  const { name, password, email, referralCode } = req.body;
   if (!email) {
     res.status(400).json({ message: "Email is required" });
   } else if (!password) {
@@ -35,8 +36,8 @@ router.post("/register", async (req, res) => {
       passwordHash,
     });
     // adding referral reward to the user
-    if (req.body.referralCode) {
-      const referringUser = await User.findById(req.body.referralCode);
+    if (referralCode) {
+      const referringUser = await User.findById(referralCode);
       if (referringUser) {
         const rewardToReferrer = makeReward({
           coins: 100,
