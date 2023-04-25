@@ -86,7 +86,6 @@ router.get("/hint", async (req, res) => {
       message: "Cannot reach target from here.",
     });
   }
-  console.log("path", path);
   const user = await User.findById(id);
   if (!user) return res.status(400).json({ message: "User not found." });
   user.hints -= 1;
