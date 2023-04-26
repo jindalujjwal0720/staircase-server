@@ -66,7 +66,7 @@ const userSchema = new mongoose.Schema({
     type: String, // string of number timestamp
     default: "0",
   },
-  reasonForSuspension: {
+  suspensionReason: {
     type: String,
     default: "",
   },
