@@ -31,16 +31,16 @@ router.get("/pair", (req, res) => {
   let pair = [];
   switch (difficulty) {
     case "beginner":
-      pair = getRandomPair(cc3, []);
+      pair = getRandomPair(cc3, graph3, []);
       break;
     case "easy":
-      pair = getRandomPair(cc4, []);
+      pair = getRandomPair(cc4, graph4, []);
       break;
     case "medium":
-      pair = getRandomPair(cc5, []);
+      pair = getRandomPair(cc5, graph5, []);
       break;
     case "hard":
-      pair = getRandomPair(cc6, []);
+      pair = getRandomPair(cc6, graph6, []);
       break;
   }
   res.status(200).json({ start: pair[0], end: pair[1] });

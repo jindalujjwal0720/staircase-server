@@ -161,12 +161,13 @@ function connectedComponents(graph) {
 // better to do it everytime instead of storing it in a file because it takes a lot of space
 // -----------------------------------------------------------------------------------------
 
-function getRandomPair(cc, alreadyUsedPairs) {
+function getRandomPair(cc, graph, alreadyUsedPairs) {
   let randomCC = cc[Math.floor(Math.random() * cc.length)];
   let randomWord1 = randomCC[Math.floor(Math.random() * randomCC.length)];
   let randomWord2 = randomCC[Math.floor(Math.random() * randomCC.length)];
   while (
-    randomWord1 === randomWord2 ||
+    (randomWord1 === randomWord2 &&
+      bfs(graph, randomWord1, randomWord2).length < 3) ||
     alreadyUsedPairs.includes(`${randomWord1} ${randomWord2}`)
   ) {
     randomCC = cc[Math.floor(Math.random() * cc.length)];
