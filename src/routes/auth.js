@@ -156,6 +156,22 @@ router.get("/user", authenticateToken, async (req, res) => {
       message: "User not found!",
     });
   }
+  // account suspension check
+  if (isAccountSuspended(user)) {
+    return res.status(401).json({
+      suspended: true,
+      message:
+        Number(user.suspendedTillTimestamp) === -1
+          ? "Account suspended indefinitely. Please contact support."
+          : "Account suspended due to suspicious activity. Please contact support.",
+      details:
+        Number(user.suspendedTillTimestamp) === -1
+          ? null
+          : `Suspended till: ${new Date(
+              Number(user.suspendedTillTimestamp)
+            ).toLocaleString()}\nSuspension Reason: ${user.suspensionReason}`,
+    });
+  }
   // sending token in a cookie
   return res
     .status(200)
