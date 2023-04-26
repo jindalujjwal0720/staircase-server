@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const authenticateToken = require("../middlewares/auth");
 const { makeReward } = require("../resolvers/rewards");
+const { isAccountSuspended } = require("../resolvers/auth");
 dotenv.config();
 const router = express.Router();
 
@@ -96,6 +97,14 @@ router.post("/login", async (req, res) => {
     if (!user) {
       res.status(400).json({ message: "User not found" });
     } else {
+      // account suspension check
+      if (isAccountSuspended(user)) {
+        return res.status(401).json({
+          message:
+            "Account suspended due to suspicious activity. Please contact support.",
+          suspendedTillTimestamp: user.suspendedTillTimestamp,
+        });
+      }
       // checking password
       const passwordCorrect = bcrypt.compareSync(password, user.passwordHash);
       if (!passwordCorrect) {

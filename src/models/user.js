@@ -62,6 +62,10 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  suspendedTillTimestamp: {
+    type: String, // string of number timestamp
+    default: "0",
+  },
 });
 
 const User = mongoose.model("User", userSchema);
