@@ -100,9 +100,13 @@ router.post("/login", async (req, res) => {
       // account suspension check
       if (isAccountSuspended(user)) {
         return res.status(401).json({
+          suspended: true,
           message:
-            "Account suspended due to suspicious activity. Please contact support.",
+            Number(user.suspendedTillTimestamp) === -1
+              ? "Account suspended indefinitely. Please contact support."
+              : "Account suspended due to suspicious activity. Please contact support.",
           suspendedTillTimestamp: user.suspendedTillTimestamp,
+          reasonForSuspension: user.reasonForSuspension,
         });
       }
       // checking password
