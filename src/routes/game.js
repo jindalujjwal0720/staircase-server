@@ -144,22 +144,34 @@ router.patch("/update", async (req, res) => {
     let difficulty = start.length;
     if (difficulty === 3) {
       const path = bfs(graph3, start, end);
-      xpInc = Math.max(0, 10 - penalties - hintsUsed - (moves - path.length));
+      xpInc = Math.max(
+        0,
+        10 - penalties * (user.level / 2) - hintsUsed - (moves - path.length)
+      );
       coinsInc = Math.max(0, Math.floor(xpInc * Math.PI));
     } else if (difficulty === 4) {
       const path = bfs(graph4, start, end);
-      xpInc = Math.max(0, 20 - penalties - hintsUsed - (moves - path.length));
+      xpInc = Math.max(
+        0,
+        20 - penalties * (user.level / 2) - hintsUsed - (moves - path.length)
+      );
       coinsInc = Math.max(0, Math.floor(xpInc * Math.PI));
     } else if (difficulty === 5) {
       const path = bfs(graph5, start, end);
-      xpInc = Math.max(0, 40 - penalties - hintsUsed - (moves - path.length));
+      xpInc = Math.max(
+        0,
+        30 - penalties * (user.level / 2) - hintsUsed - (moves - path.length)
+      );
       coinsInc = Math.max(0, Math.floor(xpInc * Math.PI));
     } else if (difficulty === 6) {
       const path = bfs(graph6, start, end);
-      xpInc = Math.max(0, 50 - penalties - hintsUsed - (moves - path.length));
+      xpInc = Math.max(
+        0,
+        40 - penalties * (user.level / 2) - hintsUsed - (moves - path.length)
+      );
       coinsInc = Math.max(0, Math.floor(xpInc * Math.PI));
     }
-    user.xp = user.xp + Math.max(xpInc, 0);
+    user.xp = user.xp + Math.floor(Math.max(xpInc, 0));
     const prevLevel = user.level;
     user.level = Math.max(
       user.level,
