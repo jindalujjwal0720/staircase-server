@@ -107,7 +107,7 @@ router.post("/login", async (req, res) => {
               : "Account suspended due to suspicious activity. Please contact support.",
           details:
             Number(user.suspendedTillTimestamp) === -1
-              ? null
+              ? `Suspended till: Indefinite\nSuspension Reason: ${user.suspensionReason}`
               : `Suspended till: ${new Date(
                   Number(user.suspendedTillTimestamp)
                 ).toLocaleString()}\nSuspension Reason: ${
