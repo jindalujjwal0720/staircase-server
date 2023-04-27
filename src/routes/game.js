@@ -151,25 +151,25 @@ router.patch("/update", async (req, res) => {
       const path = bfs(graph3, start, end);
       xpInc = Math.max(
         0,
-        10 - penalties * (user.level / 2) - hintsUsed - (moves - path.length)
+        10 - penalties * Math.floor(user.level / 2) - hintsUsed - (moves - path.length)
       );
     } else if (difficulty === 4) {
       const path = bfs(graph4, start, end);
       xpInc = Math.max(
         0,
-        20 - penalties * (user.level / 2) - hintsUsed - (moves - path.length)
+        20 - penalties * Math.floor(user.level / 2) - hintsUsed - (moves - path.length)
       );
     } else if (difficulty === 5) {
       const path = bfs(graph5, start, end);
       xpInc = Math.max(
         0,
-        30 - penalties * (user.level / 2) - hintsUsed - (moves - path.length)
+        30 - penalties * Math.floor(user.level / 2) - hintsUsed - (moves - path.length)
       );
     } else if (difficulty === 6) {
       const path = bfs(graph6, start, end);
       xpInc = Math.max(
         0,
-        40 - penalties * (user.level / 2) - hintsUsed - (moves - path.length)
+        40 - penalties * Math.floor(user.level / 2) - hintsUsed - (moves - path.length)
       );
     }
     coinsInc = Math.max(0, Math.floor(xpInc * Math.PI));
