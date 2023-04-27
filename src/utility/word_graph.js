@@ -166,8 +166,8 @@ function getRandomPair(cc, graph, alreadyUsedPairs) {
   let randomWord1 = randomCC[Math.floor(Math.random() * randomCC.length)];
   let randomWord2 = randomCC[Math.floor(Math.random() * randomCC.length)];
   while (
-    (randomWord1 === randomWord2 &&
-      bfs(graph, randomWord1, randomWord2).length < 3) ||
+    randomWord1 === randomWord2 ||
+    bfs(graph, randomWord1, randomWord2).length < randomWord1.length ||
     alreadyUsedPairs.includes(`${randomWord1} ${randomWord2}`)
   ) {
     randomCC = cc[Math.floor(Math.random() * cc.length)];

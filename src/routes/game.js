@@ -28,22 +28,27 @@ router.get("/", (req, res) => {
 // get a random pair of words
 router.get("/pair", (req, res) => {
   const difficulty = req.query.difficulty;
-  let pair = [];
+  let pair = [],
+    path = [];
   switch (difficulty) {
     case "beginner":
       pair = getRandomPair(cc3, graph3, []);
+      path = bfs(graph3, pair[0], pair[1]);
       break;
     case "easy":
       pair = getRandomPair(cc4, graph4, []);
+      path = bfs(graph4, pair[0], pair[1]);
       break;
     case "medium":
       pair = getRandomPair(cc5, graph5, []);
+      path = bfs(graph5, pair[0], pair[1]);
       break;
     case "hard":
       pair = getRandomPair(cc6, graph6, []);
+      path = bfs(graph6, pair[0], pair[1]);
       break;
   }
-  res.status(200).json({ start: pair[0], end: pair[1] });
+  res.status(200).json({ start: pair[0], end: pair[1], path });
 });
 
 // get hint for a word and its meaning
@@ -148,29 +153,26 @@ router.patch("/update", async (req, res) => {
         0,
         10 - penalties * (user.level / 2) - hintsUsed - (moves - path.length)
       );
-      coinsInc = Math.max(0, Math.floor(xpInc * Math.PI));
     } else if (difficulty === 4) {
       const path = bfs(graph4, start, end);
       xpInc = Math.max(
         0,
         20 - penalties * (user.level / 2) - hintsUsed - (moves - path.length)
       );
-      coinsInc = Math.max(0, Math.floor(xpInc * Math.PI));
     } else if (difficulty === 5) {
       const path = bfs(graph5, start, end);
       xpInc = Math.max(
         0,
         30 - penalties * (user.level / 2) - hintsUsed - (moves - path.length)
       );
-      coinsInc = Math.max(0, Math.floor(xpInc * Math.PI));
     } else if (difficulty === 6) {
       const path = bfs(graph6, start, end);
       xpInc = Math.max(
         0,
         40 - penalties * (user.level / 2) - hintsUsed - (moves - path.length)
       );
-      coinsInc = Math.max(0, Math.floor(xpInc * Math.PI));
     }
+    coinsInc = Math.max(0, Math.floor(xpInc * Math.PI));
     user.xp = user.xp + Math.floor(Math.max(xpInc, 0));
     const prevLevel = user.level;
     user.level = Math.max(
